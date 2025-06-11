@@ -1,4 +1,5 @@
 import { IProduct } from '@/interface/IProduct';
+import { Ionicons } from '@expo/vector-icons';
 import React, { useMemo, useState } from 'react';
 import {
   View,
@@ -11,25 +12,26 @@ import {
   Dimensions,
 } from 'react-native';
 
-interface ModalSelectedProProps {
+const mockProducts = [
+  { productoName: 'Producto 1', codigo: 'P001' },
+  { productoName: 'Producto 2', codigo: 'P002' },
+  { productoName: 'Producto 3', codigo: 'P003' },
+  { productoName: 'Producto 4', codigo: 'P004' },
+];
+
+interface IModalSelectedPro {
   isVisible: boolean;
   productSelected: IProduct | null;
   onClose: () => void;
   onSelectProduct: (product: IProduct) => void;
 }
 
-const mockProducts: IProduct[] = [
-  { productoName: 'Producto 1', codigo: 'P001' },
-  { productoName: 'Producto 2', codigo: 'P002' },
-  { productoName: 'Producto 3', codigo: 'P003' },
-  { productoName: 'Producto 4', codigo: 'P004' },
-];
-export const ModalSelectedPro: React.FC<ModalSelectedProProps> = ({
+export const ModalSelectedPro = ({
   isVisible,
+  productSelected,
   onClose,
   onSelectProduct,
-  productSelected,
-}) => {
+}: IModalSelectedPro) => {
   const [searchText, setSearchText] = useState('');
 
   const filteredProducts = useMemo(() => {
@@ -44,59 +46,60 @@ export const ModalSelectedPro: React.FC<ModalSelectedProProps> = ({
     <TouchableOpacity
       style={styles.itemContainer}
       onPress={() => {
-        console.log('item =>', item);
-        onSelectProduct(item);
-        onClose();
+        onSelectProduct?.(item);
+        onClose?.();
       }}
-      activeOpacity={0.7}
     >
-      <Text style={styles.productName}>{item.productoName}</Text>
-      <Text style={styles.productCode}>{item.codigo}</Text>
+      <View style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+        <Text style={styles.productName}>{item.productoName}</Text>
+        <Text style={styles.productCode}>{item.codigo}</Text>
+      </View>
+      {productSelected?.codigo === item.codigo && (
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Ionicons name="checkbox-outline" size={24} color="green" />
+        </View>
+      )}
     </TouchableOpacity>
   );
 
   return (
-    <Modal
-      visible={isVisible}
-      animationType="slide"
-      transparent
-      onRequestClose={onClose}
-    >
-      <View style={styles.modalContainer}>
+    <Modal visible={isVisible} transparent animationType="slide">
+      <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
           <TextInput
-            style={styles.searchInput}
             placeholder="Buscar producto..."
             value={searchText}
             onChangeText={setSearchText}
+            style={styles.searchInput}
           />
+
           <FlatList
             data={filteredProducts}
-            renderItem={renderItem}
             keyExtractor={(item) => item.codigo}
-            style={styles.flatList}
-            contentContainerStyle={styles.flatListContent}
+            renderItem={renderItem}
+            keyboardShouldPersistTaps="handled"
           />
-          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+
+          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
             <Text style={styles.closeButtonText}>Cerrar</Text>
           </TouchableOpacity>
         </View>
       </View>
     </Modal>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  modalContainer: {
+  modalOverlay: {
     flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.4)',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(56, 56, 56, 0.5)',
   },
   modalContent: {
     backgroundColor: 'white',
-    borderRadius: 10,
-    padding: 20,
+    borderRadius: 8,
+    padding: 16,
     width: Dimensions.get('window').width * 0.9,
     maxHeight: Dimensions.get('window').height * 0.7,
   },
@@ -107,19 +110,16 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
   },
-  flatList: {
-    maxHeight: '80%',
-  },
-  flatListContent: {
-    paddingVertical: 5,
-  },
   itemContainer: {
-    padding: 15,
+    padding: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-    backgroundColor: 'gray',
-    marginVertical: 2,
+    borderBottomColor: '#ddd',
+    backgroundColor: 'rgb(236, 248, 255)',
     borderRadius: 5,
+    marginBottom: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   productName: {
     fontSize: 16,
@@ -128,7 +128,6 @@ const styles = StyleSheet.create({
   productCode: {
     fontSize: 14,
     color: '#666',
-    marginTop: 4,
   },
   closeButton: {
     marginTop: 10,

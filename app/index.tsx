@@ -4,6 +4,7 @@ import { DeviceEventEmitter, ScrollView, StyleSheet, Text, TouchableOpacity, Vie
 import { Ionicons } from '@expo/vector-icons';
 import { IProduct } from '@/interface/IProduct';
 import { ModalSelectedPro } from '@/components/ModalSelectedPro';
+import { Colors } from '@/constants/Colors';
 interface ScannedCode {
     codigo: string;
     orden: number;
@@ -80,7 +81,7 @@ export default function HomeScreen() {
         <View style={styles.container}>
             <Text style={styles.title}>Logística ITSA</Text>
             <TouchableOpacity onPress={() => setIsModalVisible(true)} style={styles.button}>
-                <Text>Seleccionar Producto</Text>
+                <Text style={styles.inputText}>{productSelected?.productoName || 'Seleccionar Producto'}</Text>
             </TouchableOpacity>
             <View style={styles.listContainer}>
                 <Text style={styles.listTitle}>
@@ -130,10 +131,12 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     button: {
-        backgroundColor: '#007AFF',
+        backgroundColor: 'white',
         paddingHorizontal: 20,
         paddingVertical: 12,
         borderRadius: 8,
+        borderWidth: 1,
+        borderColor: Colors.bordePrimary,
         width: '80%',
         marginBottom: 20,
     },
@@ -142,6 +145,12 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    inputText: {
+        color: 'rgb(102, 101, 101)',
         fontSize: 16,
         fontWeight: 'bold',
         textAlign: 'center',
