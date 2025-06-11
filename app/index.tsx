@@ -1,6 +1,6 @@
 import BarcodeScannerScreen from '@/components/BarcodeScanner/BarcodeScannerScreen';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { DeviceEventEmitter, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { DeviceEventEmitter, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { IProduct } from '@/interface/IProduct';
 import { ModalSelectedPro } from '@/components/ModalSelectedPro';
@@ -14,6 +14,7 @@ export default function HomeScreen() {
     const [scannedCodes, setScannedCodes] = useState<ScannedCode[]>([]);
     const [productSelected, setProductSelected] = useState<IProduct | null>(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [searchText, setSearchText] = useState('');
     const validateExistCode = useCallback((code: string) => {
         return scannedCodes.some(c => c.codigo === code);
     }, [scannedCodes]);
@@ -65,24 +66,29 @@ export default function HomeScreen() {
 
     const dataDiferentCodes = useMemo(() => {
         const uniqueCodes = new Set(scannedCodes.map(c => c.codigo));
-        return Array.from(uniqueCodes).map(codigo => ({
+        const res = Array.from(uniqueCodes).map(codigo => ({
             codigo,
             orden: scannedCodes.find(c => c.codigo === codigo)?.orden || 0
         }));
-    }, [scannedCodes]);
+        const filterCode = res.filter(c => c.codigo.toLowerCase().includes(searchText.toLowerCase()));
+        return filterCode;
+    }, [scannedCodes, searchText]); // ← AQUI
 
     const handleSelectProduct = (product: IProduct) => {
-        console.log('variables =>', product);
         setProductSelected(product);
         setIsModalVisible(false);
     };
+
+    
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Logística ITSA</Text>
             <TouchableOpacity onPress={() => setIsModalVisible(true)} style={styles.button}>
                 <Text style={styles.inputText}>{productSelected?.productoName || 'Seleccionar Producto'}</Text>
+                <Ionicons name="chevron-down" size={24} color="gray" />
             </TouchableOpacity>
+            <TextInput placeholder='Buscar código escaneado' style={styles.input} value={searchText} onChangeText={setSearchText} />
             <View style={styles.listContainer}>
                 <Text style={styles.listTitle}>
                     Códigos Escaneados ({dataDiferentCodes.length})
@@ -120,15 +126,15 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-        padding: 20,
+        padding: 10,
         alignItems: 'center',
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
         color: '#333',
-        marginTop: 20,
-        marginBottom: 20,
+        marginTop: 10,
+        marginBottom: 5,
     },
     button: {
         backgroundColor: 'white',
@@ -137,8 +143,11 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         borderWidth: 1,
         borderColor: Colors.bordePrimary,
-        width: '80%',
+        width: '100%',
         marginBottom: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
     buttonActive: {
         backgroundColor: '#FF3B30',
@@ -154,6 +163,14 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         textAlign: 'center',
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: Colors.bordePrimary,
+        borderRadius: 8,
+        padding: 10,
+        width: '100%',
+        marginBottom: 20,
     },
     listContainer: {
         flex: 1,
