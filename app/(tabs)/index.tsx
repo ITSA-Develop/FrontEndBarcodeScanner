@@ -45,13 +45,12 @@ export default function HomeScreen() {
         console.log('Código ya escaneado (por estado):', scannedData);
         return;
       }
-
-      setLastScan({ code: scannedData, time: now });
-
+      setLastScan({ code: scannedData, time: now });     
       setScannedCodes(prev => [{
         codigo: scannedData,
         orden: prev.length + 1
       }, ...prev]);
+      setSearchText('');
     });
 
     return () => {
@@ -101,19 +100,22 @@ export default function HomeScreen() {
           Códigos Escaneados ({dataDiferentCodes.length})
         </Text>
         <TextInput placeholder='Buscar código escaneado' style={styles.input} value={searchText} onChangeText={setSearchText} />
-        <ScrollView style={styles.scrollView}>
+        <ScrollView style={styles.scrollView} keyboardShouldPersistTaps="handled">
           {dataDiferentCodes.map((code, index) => (
             <View key={index} style={styles.codeItem}>
               <Text style={styles.codeText} numberOfLines={1} ellipsizeMode="tail">
                 {code.codigo}
               </Text>
-              <TouchableOpacity onPress={() => handleDelete(index)}>
+              <TouchableOpacity onPress={() => handleDelete(index)} style={styles.deleteButton}>
                 <Ionicons name="trash" size={32} color="red" />
               </TouchableOpacity>
             </View>
           ))}
           {dataDiferentCodes.length === 0 && (
-            <Text style={styles.emptyText}>No hay códigos escaneados</Text>
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={styles.emptyText}>No hay códigos escaneados</Text>
+              <Ionicons name="barcode-outline" size={100} color="gray" />
+            </View>
           )}
         </ScrollView>
       </View>
@@ -248,5 +250,12 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  deleteButton: {
+    backgroundColor: 'white',
+    padding: 5,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: Colors.bordePrimary,
   },
 });
