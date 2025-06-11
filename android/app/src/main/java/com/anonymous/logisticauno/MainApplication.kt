@@ -1,4 +1,4 @@
-package com.itsa.logisticauno
+package com.itsa.logistica
 
 import android.app.Application
 import android.content.res.Configuration

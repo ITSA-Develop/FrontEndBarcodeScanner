@@ -1,4 +1,4 @@
-package com.itsa.logisticauno
+package com.itsa.logistica
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build

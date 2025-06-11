@@ -1,4 +1,4 @@
-package com.itsa.logisticauno
+package com.itsa.logistica
 
 import com.facebook.react.ReactPackage
 import com.facebook.react.bridge.NativeModule

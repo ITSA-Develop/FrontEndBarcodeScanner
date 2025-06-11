@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Alert, DeviceEventEmitter } from "react-native";
 import DataWedgeIntents from 'react-native-datawedge-intents';
 
-const DATAWEDGE_ACTION = 'com.logisticauno.ACTION';
+const DATAWEDGE_ACTION = 'com.logisticaitsa.ACTION';
 
 export default function BarcodeScannerScreen() {
     useEffect(() => {
@@ -31,7 +31,7 @@ export default function BarcodeScannerScreen() {
                 console.log('Configurando listener de DataWedge...');
                 const scanListener = DeviceEventEmitter.addListener('datawedge_broadcast_intent', (intent) => {
                     console.log('DataWedge - Intent recibido:', JSON.stringify(intent, null, 2));
-                    
+
                     if (!mounted) {
                         console.log('Componente desmontado, ignorando datos');
                         return;
@@ -47,7 +47,7 @@ export default function BarcodeScannerScreen() {
 
                 // Configuración básica de DataWedge
                 const profileConfig = {
-                    PROFILE_NAME: "LogisticaUNO",
+                    PROFILE_NAME: "LogisticaITSA",
                     PROFILE_ENABLED: "true",
                     CONFIG_MODE: "UPDATE",
                     PLUGIN_CONFIG: {
@@ -59,23 +59,31 @@ export default function BarcodeScannerScreen() {
                             scanner_hardware_trigger: "true",
                             scanner_hardware_trigger_keycode: "103",
                             decoder_code128: "true",
-                            decoder_qr_code: "true"
+                            decoder_qr_code: "true",
                         }
-                    }
+                    },
+                    APP_LIST: [
+                        {
+                            PACKAGE_NAME: "com.itsa.logistica",
+                            ACTIVITY_LIST: ['*']
+                        }
+                    ]
+
                 };
 
                 // Enviamos la configuración del perfil
                 await DataWedgeIntents.sendBroadcastWithExtras({
                     action: "com.symbol.datawedge.api.ACTION",
                     extras: {
-                        "com.symbol.datawedge.api.CREATE_PROFILE": "LogisticaUNO",
-                        "com.symbol.datawedge.api.PROFILE_CONFIG": JSON.stringify(profileConfig)
+                        "com.symbol.datawedge.api.CREATE_PROFILE": "LogisticaITSA",
+                        "com.symbol.datawedge.api.SET_CONFIG": profileConfig
+                        // "com.symbol.datawedge.api.PROFILE_CONFIG": JSON.stringify(profileConfig)
                     }
                 });
 
                 // Configuramos el intent output
                 const intentConfig = {
-                    PROFILE_NAME: "LogisticaUNO",
+                    PROFILE_NAME: "LogisticaITSA",
                     PROFILE_ENABLED: "true",
                     CONFIG_MODE: "UPDATE",
                     PLUGIN_CONFIG: {

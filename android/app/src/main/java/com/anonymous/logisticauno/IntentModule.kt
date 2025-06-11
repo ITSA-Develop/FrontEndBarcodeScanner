@@ -1,4 +1,4 @@
-package com.itsa.logisticauno
+package com.itsa.logistica
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -45,7 +45,7 @@ class IntentModule(reactContext: ReactApplicationContext) :
 
   private val scanReceiver = object : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-      if (intent?.action == "com.logisticauno.ACTION") {
+      if (intent?.action == "com.logisticaitsa.ACTION") {
         val decoded = intent.getStringExtra("com.symbol.datawedge.data_string")
         if (decoded != null) {
           val params = Arguments.createMap()
@@ -61,7 +61,7 @@ class IntentModule(reactContext: ReactApplicationContext) :
   override fun initialize() {
     super.initialize()
     val filter = IntentFilter()
-    filter.addAction("com.logisticauno.ACTION")
+    filter.addAction("com.logisticaitsa.ACTION")
     reactApplicationContext.registerReceiver(scanReceiver, filter)
   }
 

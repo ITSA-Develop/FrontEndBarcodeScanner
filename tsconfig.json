@@ -13,5 +13,5 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-, "android/app/src/main/java/com/anonymous/logisticauno/IntentModule.kt"  ]
+, "android/app/src/main/java/com/anonymous/logisticaitsa/IntentModule.kt"  ]
 }

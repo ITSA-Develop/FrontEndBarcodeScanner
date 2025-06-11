@@ -87,9 +87,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.itsa.logisticauno'
+    namespace 'com.itsa.logistica'
     defaultConfig {
-        applicationId 'com.itsa.logisticauno'
+        applicationId 'com.itsa.logistica'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
