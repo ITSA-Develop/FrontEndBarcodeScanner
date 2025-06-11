@@ -1,98 +1,124 @@
-import { useEffect, useState } from 'react';
+import BarcodeScannerScreen from '@/components/BarcodeScanner/BarcodeScannerScreen';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { DeviceEventEmitter, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import DataWedgeIntents from 'react-native-datawedge-intents';
-import BarcodeScannerScreen from '../../components/BarcodeScanner/BarcodeScannerScreen';
-
+//import DataWedgeIntents from 'react-native-datawedge-intents';
+import { Ionicons } from '@expo/vector-icons';
 interface ScannedCode {
-  data: string;
+  codigo: string;
+  orden: number;
 }
 
 export default function HomeScreen() {
-  const [isScanning, setIsScanning] = useState(false);
+  //const [isScanning, setIsScanning] = useState(false);
   const [scannedCodes, setScannedCodes] = useState<ScannedCode[]>([]);
 
+  const validateExistCode = useCallback((code: string) => {
+    return scannedCodes.some(c => c.codigo === code);
+  }, [scannedCodes]);
+
+  const [lastScan, setLastScan] = useState<{ code: string; time: number } | null>(null);
+
   useEffect(() => {
-    console.log('Configurando receiver de DataWedge...');
-
-    // Registrar el BroadcastReceiver con la ACTION que DataWedge emitirá
-    DataWedgeIntents.registerBroadcastReceiver({
-      filterActions: ['com.zebra.reactnativedemo.ACTION'],
-      filterCategories: ['android.intent.category.DEFAULT']
-    });
-
-    // Escuchar evento emitido por la librería
     const scanSubscription = DeviceEventEmitter.addListener('barcode_scan', (intent) => {
       const scannedData = intent.data;
-      if (scannedData) {
-        setScannedCodes(prev => [{
-          data: scannedData
-        }, ...prev]);
-      } else {
+
+      if (!scannedData) {
         console.log('No se encontró código escaneado:', intent);
+        return;
       }
+
+      const now = Date.now();
+      const recentDuplicate =
+        lastScan &&
+        lastScan.code === scannedData &&
+        now - lastScan.time < 1000; // 1 segundo
+
+      if (recentDuplicate) {
+        console.log('Código ignorado por duplicado rápido:', scannedData);
+        return;
+      }
+
+      if (validateExistCode(scannedData)) {
+        console.log('Código ya escaneado (por estado):', scannedData);
+        return;
+      }
+
+      setLastScan({ code: scannedData, time: now });
+
+      setScannedCodes(prev => [{
+        codigo: scannedData,
+        orden: prev.length + 1
+      }, ...prev]);
     });
 
     return () => {
-      console.log('Limpiando listener...');
       scanSubscription.remove();
     };
-  }, []);
+  }, [validateExistCode, lastScan]);
 
 
-  const toggleScanner = async () => {
-    try {
-      const newState = !isScanning;
-      setIsScanning(newState);
 
-      // Enviamos el comando para activar/desactivar el scanner
-      await DataWedgeIntents.sendBroadcastWithExtras({
-        action: "com.symbol.datawedge.api.ACTION",
-        extras: {
-          "com.symbol.datawedge.api.SCANNER_INPUT_PLUGIN": newState ? "ENABLE_PLUGIN" : "DISABLE_PLUGIN",
-          "com.symbol.datawedge.api.SOFT_SCAN_TRIGGER": "TOGGLE_SCANNING"
-        }
-      });
+  // const toggleScanner = async () => {
+  //     try {
+  //         const newState = !isScanning;
+  //         setIsScanning(newState);
 
-      console.log(newState ? 'Scanner activado' : 'Scanner desactivado');
-    } catch (error) {
-      console.error('Error al toggle scanner:', error);
-    }
+  //         // Enviamos el comando para activar/desactivar el scanner
+  //         await DataWedgeIntents.sendBroadcastWithExtras({
+  //             action: "com.symbol.datawedge.api.ACTION",
+  //             extras: {
+  //                 "com.symbol.datawedge.api.SCANNER_INPUT_PLUGIN": newState ? "ENABLE_PLUGIN" : "DISABLE_PLUGIN",
+  //                 "com.symbol.datawedge.api.SOFT_SCAN_TRIGGER": "TOGGLE_SCANNING"
+  //             }
+  //         });
+
+  //         console.log(newState ? 'Scanner activado' : 'Scanner desactivado');
+  //     } catch (error) {
+  //         console.error('Error al toggle scanner:', error);
+  //     }
+  // };
+
+  const handleDelete = (index: number) => {
+    setScannedCodes(prev => prev.filter((_, i) => i !== index));
   };
 
-  // const formatTime = (date: Date) => {
-  //   return date.toLocaleTimeString('es-ES', {
-  //     hour: '2-digit',
-  //     minute: '2-digit',
-  //     second: '2-digit'
-  //   });
-  // };
+  const dataDiferentCodes = useMemo(() => {
+    const uniqueCodes = new Set(scannedCodes.map(c => c.codigo));
+    return Array.from(uniqueCodes).map(codigo => ({
+      codigo,
+      orden: scannedCodes.find(c => c.codigo === codigo)?.orden || 0
+    }));
+  }, [scannedCodes]);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Logística UNO</Text>
-      
+      <Text style={styles.title}>Logística ITSA</Text>
+
       {/* Botón para activar/desactivar el escáner */}
-      <TouchableOpacity 
-        style={[styles.button, isScanning ? styles.buttonActive : null]}
-        onPress={toggleScanner}
-      >
-        <Text style={styles.buttonText}>
-          {isScanning ? 'Detener Escáner' : 'Iniciar Escáner'}
-        </Text>
-      </TouchableOpacity>
+      {/* <TouchableOpacity
+                style={[styles.button, isScanning ? styles.buttonActive : null]}
+                onPress={toggleScanner}
+            >
+                <Text style={styles.buttonText}>
+                    {isScanning ? 'Detener Escáner' : 'Iniciar Escáner'}
+                </Text>
+            </TouchableOpacity> */}
 
       {/* Lista de códigos escaneados */}
       <View style={styles.listContainer}>
         <Text style={styles.listTitle}>
-          Códigos Escaneados ({scannedCodes.length})
+          Códigos Escaneados ({dataDiferentCodes.length})
         </Text>
         <ScrollView style={styles.scrollView}>
-          {scannedCodes.map((code, index) => (
+          {dataDiferentCodes.map((code, index) => (
             <View key={index} style={styles.codeItem}>
-              <Text style={styles.codeText}>{code.data}</Text>
+              <Text style={styles.codeText}>{code.codigo}</Text>
+              <TouchableOpacity onPress={() => handleDelete(index)}>
+                <Ionicons name="trash" size={32} color="red" />
+              </TouchableOpacity>
             </View>
           ))}
-          {scannedCodes.length === 0 && (
+          {dataDiferentCodes.length === 0 && (
             <Text style={styles.emptyText}>No hay códigos escaneados</Text>
           )}
         </ScrollView>

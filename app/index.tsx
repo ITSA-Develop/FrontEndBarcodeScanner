@@ -1,17 +1,18 @@
 import BarcodeScannerScreen from '@/components/BarcodeScanner/BarcodeScannerScreen';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { DeviceEventEmitter, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import DataWedgeIntents from 'react-native-datawedge-intents';
 import { Ionicons } from '@expo/vector-icons';
+import { IProduct } from '@/interface/IProduct';
+import { ModalSelectedPro } from '@/components/ModalSelectedPro';
 interface ScannedCode {
     codigo: string;
     orden: number;
 }
 
 export default function HomeScreen() {
-    const [isScanning, setIsScanning] = useState(false);
     const [scannedCodes, setScannedCodes] = useState<ScannedCode[]>([]);
-
+    const [productSelected, setProductSelected] = useState<IProduct | null>(null);
+    const [isModalVisible, setIsModalVisible] = useState(false);
     const validateExistCode = useCallback((code: string) => {
         return scannedCodes.some(c => c.codigo === code);
     }, [scannedCodes]);
@@ -57,52 +58,36 @@ export default function HomeScreen() {
     }, [validateExistCode, lastScan]);
 
 
-
-    const toggleScanner = async () => {
-        try {
-            const newState = !isScanning;
-            setIsScanning(newState);
-
-            // Enviamos el comando para activar/desactivar el scanner
-            await DataWedgeIntents.sendBroadcastWithExtras({
-                action: "com.symbol.datawedge.api.ACTION",
-                extras: {
-                    "com.symbol.datawedge.api.SCANNER_INPUT_PLUGIN": newState ? "ENABLE_PLUGIN" : "DISABLE_PLUGIN",
-                    "com.symbol.datawedge.api.SOFT_SCAN_TRIGGER": "TOGGLE_SCANNING"
-                }
-            });
-
-            console.log(newState ? 'Scanner activado' : 'Scanner desactivado');
-        } catch (error) {
-            console.error('Error al toggle scanner:', error);
-        }
-    };
-
     const handleDelete = (index: number) => {
         setScannedCodes(prev => prev.filter((_, i) => i !== index));
+    };
+
+    const dataDiferentCodes = useMemo(() => {
+        const uniqueCodes = new Set(scannedCodes.map(c => c.codigo));
+        return Array.from(uniqueCodes).map(codigo => ({
+            codigo,
+            orden: scannedCodes.find(c => c.codigo === codigo)?.orden || 0
+        }));
+    }, [scannedCodes]);
+
+    const handleSelectProduct = (product: IProduct) => {
+        console.log('variables =>', product);
+        setProductSelected(product);
+        setIsModalVisible(false);
     };
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Logística ITSA</Text>
-
-            {/* Botón para activar/desactivar el escáner */}
-            <TouchableOpacity
-                style={[styles.button, isScanning ? styles.buttonActive : null]}
-                onPress={toggleScanner}
-            >
-                <Text style={styles.buttonText}>
-                    {isScanning ? 'Detener Escáner' : 'Iniciar Escáner'}
-                </Text>
+            <TouchableOpacity onPress={() => setIsModalVisible(true)} style={styles.button}>
+                <Text>Seleccionar Producto</Text>
             </TouchableOpacity>
-
-            {/* Lista de códigos escaneados */}
             <View style={styles.listContainer}>
                 <Text style={styles.listTitle}>
-                    Códigos Escaneados ({scannedCodes.length})
+                    Códigos Escaneados ({dataDiferentCodes.length})
                 </Text>
                 <ScrollView style={styles.scrollView}>
-                    {scannedCodes.map((code, index) => (
+                    {dataDiferentCodes.map((code, index) => (
                         <View key={index} style={styles.codeItem}>
                             <Text style={styles.codeText}>{code.codigo}</Text>
                             <TouchableOpacity onPress={() => handleDelete(index)}>
@@ -110,7 +95,7 @@ export default function HomeScreen() {
                             </TouchableOpacity>
                         </View>
                     ))}
-                    {scannedCodes.length === 0 && (
+                    {dataDiferentCodes.length === 0 && (
                         <Text style={styles.emptyText}>No hay códigos escaneados</Text>
                     )}
                 </ScrollView>
@@ -118,6 +103,14 @@ export default function HomeScreen() {
 
             {/* El escáner siempre está presente pero solo se activa con el botón */}
             <BarcodeScannerScreen />
+            {isModalVisible && (
+                <ModalSelectedPro
+                    isVisible={isModalVisible}
+                    productSelected={productSelected}
+                    onClose={() => setIsModalVisible(false)}
+                    onSelectProduct={handleSelectProduct}
+                />
+            )}
         </View>
     );
 }
