@@ -104,7 +104,9 @@ export default function HomeScreen() {
         <ScrollView style={styles.scrollView}>
           {dataDiferentCodes.map((code, index) => (
             <View key={index} style={styles.codeItem}>
-              <Text style={styles.codeText}>{code.codigo}</Text>
+              <Text style={styles.codeText} numberOfLines={1} ellipsizeMode="tail">
+                {code.codigo}
+              </Text>
               <TouchableOpacity onPress={() => handleDelete(index)}>
                 <Ionicons name="trash" size={32} color="red" />
               </TouchableOpacity>
@@ -138,7 +140,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    fontSize: 24,
+    fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
     marginTop: 10,
