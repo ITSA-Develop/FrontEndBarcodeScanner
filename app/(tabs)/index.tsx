@@ -5,7 +5,6 @@ import BarcodeScannerScreen from '../../components/BarcodeScanner/BarcodeScanner
 
 interface ScannedCode {
   data: string;
-  timestamp: Date;
 }
 
 export default function HomeScreen() {
@@ -26,8 +25,7 @@ export default function HomeScreen() {
       const scannedData = intent.data;
       if (scannedData) {
         setScannedCodes(prev => [{
-          data: scannedData,
-          timestamp: new Date()
+          data: scannedData
         }, ...prev]);
       } else {
         console.log('No se encontró código escaneado:', intent);
@@ -61,13 +59,13 @@ export default function HomeScreen() {
     }
   };
 
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('es-ES', {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    });
-  };
+  // const formatTime = (date: Date) => {
+  //   return date.toLocaleTimeString('es-ES', {
+  //     hour: '2-digit',
+  //     minute: '2-digit',
+  //     second: '2-digit'
+  //   });
+  // };
 
   return (
     <View style={styles.container}>
@@ -92,7 +90,6 @@ export default function HomeScreen() {
           {scannedCodes.map((code, index) => (
             <View key={index} style={styles.codeItem}>
               <Text style={styles.codeText}>{code.data}</Text>
-              <Text style={styles.timeText}>{formatTime(code.timestamp)}</Text>
             </View>
           ))}
           {scannedCodes.length === 0 && (
