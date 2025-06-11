@@ -79,20 +79,28 @@ export default function HomeScreen() {
         setIsModalVisible(false);
     };
 
-    
+
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Logística ITSA</Text>
-            <TouchableOpacity onPress={() => setIsModalVisible(true)} style={styles.button}>
-                <Text style={styles.inputText}>{productSelected?.productoName || 'Seleccionar Producto'}</Text>
-                <Ionicons name="chevron-down" size={24} color="gray" />
-            </TouchableOpacity>
-            <TextInput placeholder='Buscar código escaneado' style={styles.input} value={searchText} onChangeText={setSearchText} />
+            <View style={styles.listTitleContainer}>
+                <TouchableOpacity onPress={() => setIsModalVisible(true)} style={styles.button}>
+                    <Text style={styles.inputText}>{productSelected?.productoName || 'Seleccionar Producto'}</Text>
+                    <Ionicons name="chevron-down" size={24} color="gray" />
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => console.log('dataDiferentCodes =>', dataDiferentCodes)} style={styles.saveButton}>
+                    <Ionicons name="save" size={24} color="rgb(102, 101, 101)" />
+                </TouchableOpacity>
+            </View>
+           
+
             <View style={styles.listContainer}>
                 <Text style={styles.listTitle}>
                     Códigos Escaneados ({dataDiferentCodes.length})
                 </Text>
+                <TextInput placeholder='Buscar código escaneado' style={styles.input} value={searchText} onChangeText={setSearchText} />
                 <ScrollView style={styles.scrollView}>
                     {dataDiferentCodes.map((code, index) => (
                         <View key={index} style={styles.codeItem}>
@@ -138,13 +146,12 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: 'white',
-        paddingHorizontal: 20,
-        paddingVertical: 12,
         borderRadius: 8,
         borderWidth: 1,
+        padding: 10,
         borderColor: Colors.bordePrimary,
-        width: '100%',
-        marginBottom: 20,
+        width: '80%',
+        marginBottom: 5,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -171,6 +178,7 @@ const styles = StyleSheet.create({
         padding: 10,
         width: '100%',
         marginBottom: 20,
+        backgroundColor: 'white',
     },
     listContainer: {
         flex: 1,
@@ -190,7 +198,7 @@ const styles = StyleSheet.create({
     },
     codeItem: {
         backgroundColor: 'white',
-        padding: 15,
+        padding: 10,
         borderRadius: 8,
         marginBottom: 8,
         flexDirection: 'row',
@@ -215,10 +223,28 @@ const styles = StyleSheet.create({
         color: '#666',
         marginLeft: 10,
     },
+    listTitleContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        gap: 10,
+        width: '100%',
+    },
     emptyText: {
         textAlign: 'center',
         color: '#666',
         fontSize: 16,
         marginTop: 20,
+    },
+    saveButton: {
+        backgroundColor: 'white',
+        padding: 5,
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: Colors.bordePrimary,
+        width: '16%',
+        marginRight: 10,
+        marginBottom: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 });
