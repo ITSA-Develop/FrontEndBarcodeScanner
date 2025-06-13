@@ -44,8 +44,6 @@ const useDataWedge = () => {
           const scannedData =
             intent['com.motorolasolutions.emdk.datawedge.data_string'];
           if (scannedData) {
-            console.log('Código escaneado:', scannedData);
-
             const now = Date.now();
             const recentDuplicate =
               lastScanRef.current &&

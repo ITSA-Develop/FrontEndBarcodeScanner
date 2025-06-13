@@ -31,14 +31,14 @@ const RNDataWedgeIntentDemo = () => {
               Códigos Escaneados ({scannedCodes.length})
             </Text>
           </View>
+          <View style={styles.containerInput}>
+            <TextInput
+              style={styles.inputShareCode}
+              placeholder="Termino de busqueda"
+              showSoftInputOnFocus={false}
+            />
+          </View>
           <ScrollView style={styles.scrollView}>
-            <View style={styles.containerInput}>
-              <TextInput
-                style={styles.inputShareCode}
-                placeholder="Termino de busqueda"
-                showSoftInputOnFocus={false}
-              />
-            </View>
             {scannedCodes.map((code, index) => (
               <View key={index} style={styles.codeItem}>
                 <Text
@@ -74,6 +74,7 @@ const styles = StyleSheet.create({
   },
   containerInput: {
     width: '100%',
+    paddingBottom: 5,
   },
   inputShareCode: {
     width: '100%',
@@ -167,8 +168,8 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   codeText: {
-    fontSize: 16,
-    color: '#333',
+    fontSize: sw(6),
+    color: 'black',
     flex: 1,
   },
   deleteButton: {

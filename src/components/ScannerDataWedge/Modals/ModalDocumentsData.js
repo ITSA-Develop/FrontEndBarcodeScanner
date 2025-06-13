@@ -18,16 +18,6 @@ const ModalDocumentsData = ({
 }) => {
   const [searchText, setSearchText] = useState('');
   const [selectedItem, setSelectedItem] = useState(selectedValue);
-
-  // Sample data - replace with your actual data
-  //   const data = [
-  //     {id: '1', key: 'Item 1', value: 'Value 1'},
-  //     {id: '2', key: 'Item 2', value: 'Value 2'},
-  //     {id: '3', key: 'Item 3', value: 'Value 3'},
-  //     {id: '4', key: 'Item 4', value: 'Value 4'},
-  //     {id: '5', key: 'Item 5', value: 'Value 5'},
-  //   ];
-
   const filteredData = useMemo(() => {
     return data.filter(
       (item) =>
