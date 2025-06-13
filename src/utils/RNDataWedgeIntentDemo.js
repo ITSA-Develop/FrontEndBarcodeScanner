@@ -6,8 +6,10 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
+  TextInput,
 } from 'react-native';
-import useDataWedge from './useDataWedge';
+import useDataWedge from '../../useDataWedge';
+import {sh, sw} from './herlpers';
 
 const RNDataWedgeIntentDemo = () => {
   const {debugInfo, scannedCodes, handleDelete} = useDataWedge();
@@ -15,16 +17,28 @@ const RNDataWedgeIntentDemo = () => {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <View style={styles.row}>
-          <Text style={styles.rowText}>Debug Info:</Text>
-          <Text style={styles.debugText}>{debugInfo}</Text>
-        </View>
-
         <View style={styles.listContainer}>
-          <Text style={styles.listTitle}>
-            Códigos Escaneados ({scannedCodes.length})
-          </Text>
+          <View style={styles.containerTitleScan}>
+            <View
+              style={
+                debugInfo === 'Esperando por escaner...'
+                  ? styles.statusScanWaiting
+                  : styles.statusScanOk
+              }>
+              <Text>{}</Text>
+            </View>
+            <Text style={styles.listTitle}>
+              Códigos Escaneados ({scannedCodes.length})
+            </Text>
+          </View>
           <ScrollView style={styles.scrollView}>
+            <View style={styles.containerInput}>
+              <TextInput
+                style={styles.inputShareCode}
+                placeholder="Termino de busqueda"
+                showSoftInputOnFocus={false}
+              />
+            </View>
             {scannedCodes.map((code, index) => (
               <View key={index} style={styles.codeItem}>
                 <Text
@@ -53,14 +67,45 @@ const RNDataWedgeIntentDemo = () => {
 };
 
 const styles = StyleSheet.create({
+  containerTitleScan: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: 5,
+  },
+  containerInput: {
+    width: '100%',
+  },
+  inputShareCode: {
+    width: '100%',
+    backgroundColor: 'white',
+    height: sh(7.5),
+    fontSize: sw(3.5),
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: 'gray',
+  },
+  statusScanOk: {
+    margin: 10,
+    borderRadius: 10,
+    backgroundColor: 'green',
+    width: 10,
+    height: 10,
+  },
+  statusScanWaiting: {
+    margin: 10,
+    borderRadius: 10,
+    backgroundColor: 'red',
+    width: 10,
+    height: 10,
+  },
   container: {
     flex: 1,
-    height: Dimensions.get('window').height - 30,
+    height: sh(77),
     backgroundColor: 'white',
-    padding: 2,
+    marginTop: sh(-2),
   },
   row: {
-    margin: 5,
+    margin: 2,
     flexDirection: 'column',
   },
   rowText: {
@@ -69,29 +114,40 @@ const styles = StyleSheet.create({
     color: '#555555',
     margin: 2,
   },
-  debugText: {
-    fontSize: 14,
+  debugTextWaiting: {
+    fontSize: 10,
     textAlign: 'left',
-    color: '#FF0000',
     margin: 2,
     padding: 5,
+    borderRadius: 5,
+    color: '#FF0000',
     backgroundColor: '#FFE0E0',
+  },
+  debugTextReady: {
+    fontSize: 10,
+    textAlign: 'left',
+    color: 'green',
+    margin: 2,
+    padding: 5,
+    borderRadius: 5,
+    backgroundColor: 'rgb(197, 255, 192)',
   },
   listContainer: {
     flex: 1,
     backgroundColor: '#f5f5f5',
     borderRadius: 10,
-    padding: 10,
-    marginTop: 10,
+    paddingTop: 2,
+    paddingRight: 2,
+    paddingLeft: 2,
   },
   listTitle: {
-    fontSize: 18,
+    fontSize: 12,
     fontWeight: '600',
-    marginBottom: 10,
     color: '#333',
   },
   scrollView: {
     flex: 1,
+    flexDirection: 'column',
   },
   codeItem: {
     backgroundColor: 'white',

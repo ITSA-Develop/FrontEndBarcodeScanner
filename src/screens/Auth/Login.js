@@ -21,12 +21,14 @@ const LoginScreen = ({setIsLoggedIn}) => {
           style={styles.input}
           placeholder="Usuario"
           placeholderTextColor="#666"
+          showSoftInputOnFocus={false}
         />
         <TextInput
           style={styles.input}
           placeholder="Contraseña"
           placeholderTextColor="#666"
           secureTextEntry
+          showSoftInputOnFocus={false}
         />
         <TouchableOpacity style={styles.button} onPress={() => login()}>
           <Text style={styles.buttonText}>Ingresasr</Text>

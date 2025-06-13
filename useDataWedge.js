@@ -13,7 +13,7 @@ const useDataWedge = () => {
     barcodeData: '',
     barcodeSource: '',
     lastScanTime: '',
-    debugInfo: 'Waiting for scanner...',
+    debugInfo: 'Esperando por escaner...',
     scannedCodes: [],
   });
 
@@ -134,10 +134,10 @@ const useDataWedge = () => {
       if (isMounted.current) {
         setState((prevState) => ({
           ...prevState,
-          debugInfo: 'Configuración de DataWedge completada',
+          debugInfo: 'Escaner listo',
         }));
       }
-      console.log('Configuración de DataWedge completada');
+      //console.log('Configuración de DataWedge completada');
 
       return scanListener;
     } catch (err) {

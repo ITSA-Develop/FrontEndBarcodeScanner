@@ -60,9 +60,15 @@ const ModalDocumentsData = ({
             placeholder="Buscar..."
             value={searchText}
             onChangeText={setSearchText}
+            showSoftInputOnFocus={false}
           />
           <FlatList
             data={filteredData}
+            ListEmptyComponent={
+              <View style={styles.containerNoData}>
+                <Text style={styles.noDataText}>Sin resultados</Text>
+              </View>
+            }
             keyExtractor={(item) => item.id}
             renderItem={({item}) => (
               <TouchableOpacity
@@ -76,9 +82,6 @@ const ModalDocumentsData = ({
               </TouchableOpacity>
             )}
           />
-          {/* <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-            <Text style={styles.closeButtonText}>Cerrar</Text>
-          </TouchableOpacity> */}
         </View>
       </View>
     </Modal>
@@ -135,6 +138,16 @@ const styles = StyleSheet.create({
   closeButtonText: {
     color: 'white',
     fontWeight: 'bold',
+  },
+  containerNoData: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  noDataText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#666',
   },
 });
 

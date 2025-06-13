@@ -5,6 +5,7 @@ import CustomHeader from '../../components/Layout/Header';
 import ModalDocumentsData from '../../components/ScannerDataWedge/Modals/ModalDocumentsData';
 import Icon from '../../constants/Icons';
 import {GRIS_OSCURO} from '../../constants/Colors';
+import RNDataWedgeIntentDemo from '../../utils/RNDataWedgeIntentDemo';
 
 const DispatchScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -53,6 +54,7 @@ const DispatchScreen = () => {
           </TouchableOpacity>
         </View>
       </View>
+      <RNDataWedgeIntentDemo />
       {modalVisible && dataDespachos.length > 0 && (
         <ModalDocumentsData
           visible={modalVisible} // Control modal visibility
@@ -72,10 +74,12 @@ export default DispatchScreen;
 
 const styles = StyleSheet.create({
   containerBtnsFilter: {
-    flexDirection: 'column',
+    flexDirection: 'row',
     justifyContent: 'space-between',
+    height: 'auto',
   },
   containerBtnFilter: {
     padding: 5,
+    width: '50%',
   },
 });
