@@ -13,6 +13,7 @@ const DispatchScreen = () => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [openModalProductos, setOpenModalProductos] = useState(false);
   const [selectedItemProducto, setSelectedItemProducto] = useState(null);
+
   const dataDespachos = [
     {id: '1', key: 'Despacho 14520', value: 'Value 1'},
     {id: '2', key: 'Despacho 24521', value: 'Value 2'},
@@ -35,7 +36,7 @@ const DispatchScreen = () => {
 
   return (
     <View style={GS.container}>
-      <CustomHeader title="Despachos" />
+      <CustomHeader title="Despachos" viewGoBack={true} viewSave={true} />
       <View style={styles.containerBtnsFilter}>
         <View style={styles.containerBtnFilter}>
           <TouchableOpacity

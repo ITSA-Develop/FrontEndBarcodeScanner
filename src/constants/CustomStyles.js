@@ -47,17 +47,6 @@ export const GS = StyleSheet.create({
     borderWidth: 1,
     borderColor: GRIS_CLARO,
   },
-  header: {
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    textAlign: 'center',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingLeft: 10,
-    paddingRight: 10,
-    borderBottomWidth: 0.5,
-    borderBottomColor: 'gray',
-  },
   titleBlack: {
     color: 'black',
     fontSize: 16,
