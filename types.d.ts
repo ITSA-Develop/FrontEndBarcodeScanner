@@ -1,6 +1,6 @@
 // types.d.ts
-declare module "react-native-datawedge";
-declare module "react-native-datawedge-intents" {
+declare module 'react-native-datawedge';
+declare module 'react-native-datawedge-intents' {
   interface BroadcastReceiverConfig {
     filterActions: string[];
     filterCategories: string[];
@@ -15,4 +15,4 @@ declare module "react-native-datawedge-intents" {
     static registerBroadcastReceiver(config: BroadcastReceiverConfig): void;
     static sendBroadcastWithExtras(config: BroadcastWithExtras): void;
   }
-} 
+}
