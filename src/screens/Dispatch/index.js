@@ -21,15 +21,37 @@ const DispatchScreen = () => {
   return (
     <View style={GS.container}>
       <CustomHeader title="Despachos" />
-      <View style={styles.containerBtnFilter}>
-        <TouchableOpacity
-          style={GS.btnTypeInputRow}
-          onPress={() => setModalVisible(true)}>
-          <Text style={{color: GRIS_OSCURO}}>
-            {selectedItem ? selectedItem.key : 'Seleccionar Despacho'}
-          </Text>
-          <Icon library="AntDesign" name="down" size={20} color={GRIS_OSCURO} />
-        </TouchableOpacity>
+      <View style={styles.containerBtnsFilter}>
+        <View style={styles.containerBtnFilter}>
+          <TouchableOpacity
+            style={GS.btnTypeInputRow}
+            onPress={() => setModalVisible(true)}>
+            <Text style={{color: GRIS_OSCURO}}>
+              {selectedItem ? selectedItem.key : 'Seleccionar Despacho'}
+            </Text>
+            <Icon
+              library="AntDesign"
+              name="down"
+              size={20}
+              color={GRIS_OSCURO}
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.containerBtnFilter}>
+          <TouchableOpacity
+            style={GS.btnTypeInputRow}
+            onPress={() => setModalVisible(true)}>
+            <Text style={{color: GRIS_OSCURO}}>
+              {selectedItem ? selectedItem.key : 'Seleccionar producto'}
+            </Text>
+            <Icon
+              library="AntDesign"
+              name="down"
+              size={20}
+              color={GRIS_OSCURO}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
       {modalVisible && dataDespachos.length > 0 && (
         <ModalDocumentsData
@@ -49,8 +71,11 @@ const DispatchScreen = () => {
 export default DispatchScreen;
 
 const styles = StyleSheet.create({
+  containerBtnsFilter: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
   containerBtnFilter: {
-    flex: 1,
-    padding: 10,
+    padding: 5,
   },
 });
