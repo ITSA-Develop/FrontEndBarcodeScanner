@@ -1,12 +1,12 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 
-const Invoices = () => {
+const DispatchScreen = () => {
   return (
     <View>
-      <Text>Invoices</Text>
+      <Text>Dispatch</Text>
     </View>
   );
 };
 
-export default Invoices;
+export default DispatchScreen;

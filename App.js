@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import LoginScreen from './src/screens/Auth/Login';
 import HomeScreen from './src/screens/Home';
 import Invoices from './src/screens/Invoices';
+import DispatchScreen from './src/screens/Dispatch';
 
 const Stack = createStackNavigator();
 
@@ -24,8 +25,8 @@ export default function App() {
               options={{headerShown: false}}
             />
             <Stack.Screen
-              name="Invoices"
-              component={Invoices}
+              name="Dispatch"
+              component={DispatchScreen}
               options={{headerShown: false}}
             />
           </>
