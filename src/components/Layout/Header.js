@@ -3,7 +3,7 @@ import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {GS} from '../../constants/CustomStyles';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
-const Header = ({title, viewGoBack = false}) => {
+const CustomHeader = ({title, viewGoBack = false}) => {
   const navigate = useNavigation();
   return (
     <View style={GS.header}>
@@ -19,7 +19,7 @@ const Header = ({title, viewGoBack = false}) => {
   );
 };
 
-export default Header;
+export default CustomHeader;
 
 const styles = StyleSheet.create({
   titleContainer: {

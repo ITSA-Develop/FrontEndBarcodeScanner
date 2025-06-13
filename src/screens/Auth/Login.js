@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import {svw} from '../../utils/herlpers';
+import {sw} from '../../utils/herlpers';
 
 const LoginScreen = ({setIsLoggedIn}) => {
   const login = () => {
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loginBox: {
-    width: svw(80),
+    width: sw(80),
     padding: 20,
     borderWidth: 1,
     borderColor: 'gray',

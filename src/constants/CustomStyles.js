@@ -1,6 +1,11 @@
 import {StyleSheet} from 'react-native';
+import {sh} from '../utils/herlpers';
 
 export const GS = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
   btnPrimary: {
     flexDirection: 'row',
     backgroundColor: 'black',
@@ -27,6 +32,19 @@ export const GS = StyleSheet.create({
   btnTextSecondary: {
     color: 'black',
     fontSize: 16,
+  },
+  btnTypeInputRow: {
+    backgroundColor: 'transparent',
+    padding: 5,
+    borderRadius: 5,
+    textAlign: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    borderWidth: 1,
+    borderColor: 'black',
+    height: sh(8),
   },
   header: {
     flexDirection: 'row',
