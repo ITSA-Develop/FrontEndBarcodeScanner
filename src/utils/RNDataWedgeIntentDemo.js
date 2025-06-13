@@ -5,13 +5,12 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
-  Dimensions,
   TextInput,
 } from 'react-native';
 import useDataWedge from '../../useDataWedge';
 import {sh, sw} from './herlpers';
 
-const RNDataWedgeIntentDemo = () => {
+const RNDataWedgeIntentDemo = ({numberScans = 0}) => {
   const {debugInfo, scannedCodes, handleDelete} = useDataWedge();
 
   return (
@@ -19,17 +18,29 @@ const RNDataWedgeIntentDemo = () => {
       <View style={styles.container}>
         <View style={styles.listContainer}>
           <View style={styles.containerTitleScan}>
-            <View
-              style={
-                debugInfo === 'Esperando por escaner...'
-                  ? styles.statusScanWaiting
-                  : styles.statusScanOk
-              }>
-              <Text>{}</Text>
+            <View style={styles.containerTitleScanLeft}>
+              <View
+                style={
+                  debugInfo === 'Esperando por escaner...'
+                    ? styles.statusScanWaiting
+                    : styles.statusScanOk
+                }>
+                <Text>{}</Text>
+              </View>
+              <Text style={styles.listTitle}>
+                Códigos Escaneados ({scannedCodes.length})
+              </Text>
             </View>
-            <Text style={styles.listTitle}>
-              Códigos Escaneados ({scannedCodes.length})
-            </Text>
+            <View style={styles.containerTitleScanRight}>
+              {numberScans > 0 && (
+                <Text style={styles.listTitle}>
+                  Total a escanear:{' '}
+                  <Text style={{fontWeight: 'bold', fontSize: sw(5)}}>
+                    {numberScans}
+                  </Text>
+                </Text>
+              )}
+            </View>
           </View>
           <View style={styles.containerInput}>
             <TextInput
@@ -67,6 +78,18 @@ const RNDataWedgeIntentDemo = () => {
 };
 
 const styles = StyleSheet.create({
+  containerTitleScanLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: sw(50),
+  },
+  containerTitleScanRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingRight: 10,
+    width: sw(50),
+  },
   containerTitleScan: {
     flexDirection: 'row',
     alignItems: 'center',

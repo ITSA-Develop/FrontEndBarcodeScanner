@@ -23,16 +23,21 @@ const DispatchScreen = () => {
   ];
 
   const dataProductos = [
-    {id: '1', desId: '1', key: 'Producto 1', value: 'Value 1'},
-    {id: '2', desId: '1', key: 'Producto 2', value: 'Value 2'},
-    {id: '3', desId: '2', key: 'Producto 3', value: 'Value 3'},
-    {id: '4', desId: '3', key: 'Producto 4', value: 'Value 4'},
-    {id: '5', desId: '3', key: 'Producto 5', value: 'Value 5'},
+    {id: '1', desId: '1', key: 'Producto 1', value: 'Value 1', amount: 5},
+    {id: '2', desId: '1', key: 'Producto 2', value: 'Value 2', amount: 5},
+    {id: '3', desId: '2', key: 'Producto 3', value: 'Value 3', amount: 2},
+    {id: '4', desId: '3', key: 'Producto 4', value: 'Value 4', amount: 2},
+    {id: '5', desId: '3', key: 'Producto 5', value: 'Value 5', amount: 2},
   ];
 
   const dataProductsFiltered = useMemo(() => {
     return dataProductos.filter((item) => item.desId === selectedItem?.id);
   }, [selectedItem, dataProductos]);
+
+  const handleDispatch = (dispatchSelected) => {
+    setSelectedItem(dispatchSelected);
+    setSelectedItemProducto(null);
+  };
 
   return (
     <View style={GS.container}>
@@ -74,13 +79,15 @@ const DispatchScreen = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <RNDataWedgeIntentDemo />
+      {selectedItemProducto && (
+        <RNDataWedgeIntentDemo numberScans={selectedItemProducto.amount} />
+      )}
       {modalVisible && dataDespachos.length > 0 && (
         <ModalDocumentsData
           visible={modalVisible} // Control modal visibility
           onClose={() => setModalVisible(false)} // Handle modal close
           onSelect={(item) => {
-            setSelectedItem(item);
+            handleDispatch(item);
           }} // Handle item selection
           selectedValue={selectedItem} // Currently selected value
           data={dataDespachos}

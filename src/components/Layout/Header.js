@@ -30,7 +30,6 @@ export default CustomHeader;
 const styles = StyleSheet.create({
   titleContainer: {
     width: '100%',
-    backgroundColor: 'white',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -41,7 +40,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: sh(7),
+    height: sh(8),
     paddingLeft: 10,
     paddingRight: 10,
     borderBottomWidth: 0.5,
