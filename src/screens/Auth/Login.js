@@ -9,6 +9,10 @@ import {
 import {svw} from '../../utils/herlpers';
 
 const LoginScreen = ({setIsLoggedIn}) => {
+  const login = () => {
+    console.log('variables =>', setIsLoggedIn);
+    setIsLoggedIn();
+  };
   return (
     <View style={styles.container}>
       <View style={styles.loginBox}>
@@ -24,10 +28,8 @@ const LoginScreen = ({setIsLoggedIn}) => {
           placeholderTextColor="#666"
           secureTextEntry
         />
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => setIsLoggedIn(true)}>
-          <Text style={styles.buttonText}>Ingresar</Text>
+        <TouchableOpacity style={styles.button} onPress={() => login()}>
+          <Text style={styles.buttonText}>Ingresasr</Text>
         </TouchableOpacity>
       </View>
     </View>
